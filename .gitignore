@@ -31,3 +31,35 @@ vignettes/*.pdf
 # Temporary files created by R markdown
 *.utf8.md
 *.knit.md
+
+# Some Windows dust
+.DS_Store
+
+# KDevelop project files
+*.kdev4
+.kdev4
+
+# LaTeX/knitr
+*.aux
+*.log
+*.out
+cache-knitr/
+
+
+# backup files
+*~
+*.backup
+*.bak
+
+# Example code in package build process:
+*-Ex.R
+
+# Previewing README
+README.html
+
+# Temporary and Test Data
+_test
+tmp/
+inst/doc
+
+*.Rproj
