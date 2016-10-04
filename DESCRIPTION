@@ -1,0 +1,24 @@
+Package: housepricesKaggle
+Type: Package
+Version: 0.0.1
+Title: Playing with House Prices Kaggle Competition
+Description: An attempt to build an advanced regression model which predicts the
+    sale prices in Iowa from house data
+Authors@R: c(person("Gabriele", "Baldassarre", role = c("aut", "cre"), email="gabriele@gabrielebaldassarre.com"), person("Hassan", "Saidinejad", role = c("aut")))
+Date: 2016-10-04
+URL: https://www.kaggle.com/c/house-prices-advanced-regression-techniques
+BugReports: https://github.com/mrmitaly/houseprices-kaggle/issues
+Depends:
+    R (>= 3.0)
+Imports:
+    plyr,
+    dplyr
+Suggests:
+    testthat,
+    knitr,
+    RCurl
+License: MIT + file LICENSE
+NeedsCompilation: no
+BuildKeepEmpty: TRUE
+VignetteBuilder: knitr
+RoxygenNote: 5.0.1
