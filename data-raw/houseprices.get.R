@@ -69,3 +69,11 @@ houseprices.test$Fence <- factor(houseprices.test$Fence, levels=rev(c("GdPrv","M
 #YrSold
 
 rm(endpoint, download.files, houseprices.data)
+
+db <- dbConnect(SQLite(), dbname="inst/Tableau/houseprices.sqlite")
+
+dbWriteTable(db, "housepricesTrain", houseprices.train)
+dbWriteTable(db, "housepricesTest", houseprices.test)
+
+dbDisconnect(db)
+
