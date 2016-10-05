@@ -12,7 +12,11 @@ Depends:
     R (>= 3.0)
 Imports:
     plyr,
-    dplyr
+    dplyr,
+    caret,
+    data.table,
+    Boruta,
+    pROC
 Suggests:
     testthat,
     knitr,
