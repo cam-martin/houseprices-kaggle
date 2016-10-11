@@ -1,7 +1,7 @@
 # In this script we're going to perform a relevant feature extraction and analysis
 # using the popular Boruta package
 
-invisible(lapply(c("caret", "Boruta", "plyr", "dtplyr", "pROC"), function(pkg){
+invisible(lapply(c("caret", "Boruta", "plyr", "dtplyr", "pROC", "rpart", "effects"), function(pkg){
   if(! require(pkg, character.only = TRUE)) install.packages(pkg, depend = TRUE)
   library(pkg, character.only = TRUE, logical.return = TRUE)
 }))
@@ -24,12 +24,59 @@ unique.classes <- unique(data.classes)
 attr.data.types <- lapply(unique.classes,function(x){names(data.classes[data.classes==x])})
 names(attr.data.types) <- unique.classes
 
-# Prepare data for Boruta
+###########################
+# Prepare data for Boruta #
+###########################
 
 response <- houseprices.train$SalePrice
 
-# remove identifier and response variables
+
 sample.df <- houseprices.train[houseprices.candidates]
+
+###########################
+# IMPUTING MISSING VALUES #
+###########################
+
+# Electrical
+electrical.train <- sample.df[!is.na(sample.df$Electrical),]
+electrical.test <- sample.df[is.na(sample.df$Electrical),]
+
+electrical.fit <-  rpart(Electrical ~ ., method="class", data=electrical.train)
+
+electrical.test$Electrical <- predict(electrical.fit, newdata=electrical.test, type="class")
+
+sample.df <- rbind(electrical.train, electrical.test)
+
+# LotFrontage
+lotfrontage.train <- sample.df[!is.na(sample.df$LotFrontage) & (sample.df$LotConfig=="Corner"),]
+lotfrontage.test <- sample.df[is.na(sample.df$LotFrontage) & (sample.df$LotConfig=="Corner"),]
+lotfrontage.else <- sample.df[sample.df$LotConfig!="Corner",]
+
+lotfrontage.formula <- LotFrontage ~ MSSubClass + 
+  LotArea + 
+  LotShape + 
+  LandContour + 
+  Neighborhood +
+  Condition1 +
+  GrLivArea +
+  TotRmsAbvGrd +
+  GarageType +
+  GarageArea +
+  Condition1 +
+  OverallQual
+
+
+# TODO: cross-validation
+
+lotfrontage.fit <- lm(lotfrontage.formula, lotfrontage.train, na.action=na.exclude)
+
+lotfrontage.test$LotFrontage <- predict(lotfrontage.fit, newdata=lotfrontage.test)
+
+plot(allEffects(lotfrontage.fit))
+
+sample.df <- rbind(lotfrontage.train, lotfrontage.test, lotfrontage.else)
+
+
 
 # Recode missings in placeholder values
 
